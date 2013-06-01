@@ -25,12 +25,6 @@ describe "User pages" do
 
     let(:submit) { "Create my account" }
 
-    describe "with invalid information" do
-      it "should not create a user" do
-        expect { click_button submit }.not_to change(User, :count)
-      end
-    end
-
     describe "with valid information" do
       before do
         fill_in "Name",         with: "Example User"
@@ -41,6 +35,21 @@ describe "User pages" do
 
       it "should create a user" do
         expect { click_button submit }.to change(User, :count).by(1)
+      end
+    end
+
+    describe "with invalid information" do
+
+      it "should not create a user" do
+        expect { click_button submit }.not_to change(User, :count)
+      end
+
+      describe "after submission" do
+
+        before { click_button submit }
+
+        it { should have_selector('title', text: full_title('Sign up')) }
+        it { should have_selector('#error_explanation') }
       end
     end
 
